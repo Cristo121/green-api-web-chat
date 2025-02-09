@@ -8,7 +8,7 @@ import { useState } from "react";
 function Recipient() {
   const { setTabIndex } = useTabs();
   const { config, setConfig } = useInstanceConfig();
-  const [value, setValue] = useState<InputValueType>("");
+  const [value, setValue] = useState<InputValueType>(config.recipient);
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -33,7 +33,6 @@ function Recipient() {
       </h1>
 
       <Input
-        initialValue={config.recipient}
         type="tel"
         value={value}
         placeholder="Enter phone number"
@@ -41,7 +40,9 @@ function Recipient() {
       />
 
       <div className="flex flex-row gap-[8px]">
-        <Button type="submit">Start Chat</Button>
+        <Button type="submit" disabled={!value}>
+          Start Chat
+        </Button>
         <Button
           className="bg-grey-500"
           onClick={() => setTabIndex(TabList.Instance)}

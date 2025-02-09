@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useInstanceConfig } from "../hooks/InstanceConfig";
 import Input, { InputValueType } from "./shared/Input";
 import { TabList, useTabs } from "./shared/Tabs";
-import { useAccountInfo } from "../hooks/AccountInfo";
 import Button from "./shared/Button";
 
 function Instance() {
   const { setTabIndex } = useTabs();
-  const { authorized, load: loadAccountInfo } = useAccountInfo();
-  const { config: localStorageConfig, setConfig: localStorageSetConfig } =
-    useInstanceConfig();
+  const { config, setConfig } = useInstanceConfig();
 
-  const [config, setConfig] = useState(localStorageConfig);
   const [instanceId, setInstanceId] = useState<InputValueType>(
     config.idInstance
   );
@@ -19,35 +15,25 @@ function Instance() {
     config.apiTokenInstance
   );
 
-  useEffect(() => {
-    if (authorized) {
-      setTabIndex(config.recipient ? TabList.Chat : TabList.Recipient);
-    }
-  }, [authorized, setTabIndex, config]);
-
-  const load = useCallback(
-    () =>
-      loadAccountInfo().then(() => {
-        localStorageSetConfig((prev) => {
-          return { ...prev, ...config };
-        });
-      }),
-    [config, loadAccountInfo, localStorageSetConfig]
-  );
-
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    load();
+    setTabIndex(config.recipient ? TabList.Chat : TabList.Recipient);
   };
 
   const onIdInstanceChange = (event: React.BaseSyntheticEvent) => {
     setInstanceId(event.target.value);
-    setConfig((prev) => ({ ...prev, idInstance: event.target.value }));
+    setConfig((prev) => ({
+      ...prev,
+      idInstance: event.target.value,
+    }));
   };
 
   const onApiTokenInstanceChange = (event: React.BaseSyntheticEvent) => {
     setApiTokenInstance(event.target.value);
-    setConfig((prev) => ({ ...prev, apiTokenInstance: event.target.value }));
+    setConfig((prev) => ({
+      ...prev,
+      apiTokenInstance: event.target.value,
+    }));
   };
 
   return (
@@ -74,7 +60,7 @@ function Instance() {
         onChange={(e) => onApiTokenInstanceChange(e)}
       />
 
-      <Button type="submit">
+      <Button type="submit" disabled={!instanceId || !apiTokenInstance}>
         <span className="px-8">Auth</span>
       </Button>
     </form>

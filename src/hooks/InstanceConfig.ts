@@ -16,7 +16,7 @@ export function useInstanceConfig() {
     apiTokenInstance = "",
     idInstance = "",
     recipient = "",
-  } = JSON.parse(localStorage.getItem(LocalStorageKeys.config) || "");
+  } = JSON.parse(localStorage.getItem(LocalStorageKeys.config) || "{}");
 
   const [config, setConfig] = useState<InstanceConfig>({
     apiUrl: "api", //import.meta.env.VITE_API_GREEN_API_URL,
