@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+#root {
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @media (orientation: Portrait) {
+    background-image: url("/src/assets/bg-portrait.jpeg");
+  }
+
+  @media (orientation: Landscape) {
+    background-image: url("/src/assets/bg-landscape.jpeg");
+  }
+}
